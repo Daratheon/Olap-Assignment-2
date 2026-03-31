@@ -14,7 +14,7 @@ class ScanResult:
 
 
 class BaselineScanner:
-    """Correctness oracle: scan base values only."""
+    """Correctness oracle: scans base values only."""
 
     def scan_column(self, column: Column, predicate: Predicate) -> ScanResult:
         matched_row_ids: list[int] = []
@@ -23,8 +23,10 @@ class BaselineScanner:
 
         for segment in column.iter_segments():
             segments_scanned += 1
+
             for offset, value in enumerate(segment.values):
                 values_scanned += 1
+
                 if predicate.matches(value):
                     matched_row_ids.append(segment.start_row_id + offset)
 
@@ -34,4 +36,8 @@ class BaselineScanner:
             segments_skipped=0,
             false_positives=0,
         )
-        return ScanResult(row_ids=matched_row_ids, metrics=metrics)
+
+        return ScanResult(
+            row_ids=matched_row_ids,
+            metrics=metrics,
+        )

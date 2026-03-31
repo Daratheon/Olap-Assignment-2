@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Generic, Sequence, TypeVar
+from typing import Callable, Generic, Sequence, TypeVar
 
 T = TypeVar("T")
 
@@ -29,4 +29,18 @@ class Segment(Generic[T]):
         start_row_id: int,
         values: Sequence[T],
     ) -> "Segment[T]":
-        return cls(segment_id=segment_id, start_row_id=start_row_id, values=tuple(values))
+        return cls(
+            segment_id=segment_id,
+            start_row_id=start_row_id,
+            values=tuple(values),
+        )
+
+    def scan(self, predicate: Callable[[T], bool]) -> list[int]:
+        """Return global row IDs whose values satisfy the predicate."""
+        matches: list[int] = []
+
+        for offset, value in enumerate(self.values):
+            if predicate(value):
+                matches.append(self.start_row_id + offset)
+
+        return matches

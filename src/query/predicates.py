@@ -1,33 +1,55 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
+from abc import ABC, abstractmethod
 
 
-@dataclass(frozen=True)
-class Predicate:
-    column: str
+class Predicate(ABC):
+    """
+    Base class for all predicates.
 
-    def matches(self, value: Any) -> bool:
+    Every predicate targets one column and must implement
+    matches(value) -> bool.
+    """
+
+    def __init__(self, column: str):
+        self.column = column
+
+    @abstractmethod
+    def matches(self, value) -> bool:
+        """
+        Return True if the value satisfies the predicate.
+        """
         raise NotImplementedError
 
 
-@dataclass(frozen=True)
 class Eq(Predicate):
-    target: Any
+    """
+    Equality predicate.
 
-    def matches(self, value: Any) -> bool:
-        return value == self.target
+    Example:
+    status = "A"
+    """
+
+    def __init__(self, column: str, value):
+        super().__init__(column)
+        self.value = value
+
+    def matches(self, value) -> bool:
+        return value == self.value
 
 
-@dataclass(frozen=True)
 class Between(Predicate):
-    lower: Any
-    upper: Any
-    inclusive_lower: bool = True
-    inclusive_upper: bool = True
+    """
+    Range predicate.
 
-    def matches(self, value: Any) -> bool:
-        lower_ok = value >= self.lower if self.inclusive_lower else value > self.lower
-        upper_ok = value <= self.upper if self.inclusive_upper else value < self.upper
-        return lower_ok and upper_ok
+    Example:
+    timestamp BETWEEN 100 AND 500
+    """
+
+    def __init__(self, column: str, low, high):
+        super().__init__(column)
+        self.low = low
+        self.high = high
+
+    def matches(self, value) -> bool:
+        return self.low <= value <= self.high
