@@ -30,9 +30,9 @@ class Eq(Predicate):
     status = "A"
     """
 
-    def __init__(self, column: str, value):
+    def __init__(self, column: str, target):
         super().__init__(column)
-        self.value = value
+        self.value = target
 
     def matches(self, value) -> bool:
         return value == self.value
@@ -46,10 +46,10 @@ class Between(Predicate):
     timestamp BETWEEN 100 AND 500
     """
 
-    def __init__(self, column: str, low, high):
+    def __init__(self, column: str, lower, upper):
         super().__init__(column)
-        self.low = low
-        self.high = high
+        self.low = lower
+        self.high = upper
 
     def matches(self, value) -> bool:
         return self.low <= value <= self.high

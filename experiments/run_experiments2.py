@@ -1,3 +1,5 @@
+import config # to make src available for import
+
 from src.storage.column import Column
 from src.storage.table import Table
 from src.query.executor import QueryExecutor

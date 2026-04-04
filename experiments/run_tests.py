@@ -1,6 +1,7 @@
 import subprocess
 import sys
 
+import config # to make src available for import
 
 TEST_SCRIPTS = [
     "experiments/test_zone_map.py",

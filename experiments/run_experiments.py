@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import config # to make src available for import
+
 from src.data_gen import DatasetConfig, SyntheticDataGenerator
 from src.query.executor import QueryExecutor
 from src.query.predicates import Between, Eq
-
 
 def main() -> None:
     generator = SyntheticDataGenerator(DatasetConfig(num_rows=1000, segment_size=128, seed=42))

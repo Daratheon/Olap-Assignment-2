@@ -1,0 +1,5 @@
+# basic pytest setup - only here so that pytest can find src/
+# package when running test_*.py files
+
+[pytest]
+pythonpath = ["."]
